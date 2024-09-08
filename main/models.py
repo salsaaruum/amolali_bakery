@@ -1,11 +1,11 @@
 from django.db import models
 
-class Item(models.Model):
-    name = models.CharField(max_length=255)  # Atribut nama item
-    price = models.IntegerField()  # Atribut harga item
-    description = models.TextField()  # Atribut deskripsi item
-    category = models.CharField(max_length=100, blank=True, null=True)  # Atribut kategori item, optional
-    image = models.ImageField(upload_to='items/', blank=True, null=True)  # Atribut gambar item, optional
+class Product(models.Model):
+    name = models.CharField(max_length=255)  # Atribut nama product
+    price = models.IntegerField()  # Atribut harga product
+    description = models.TextField()  # Atribut deskripsi product
+    category = models.CharField(max_length=100, blank=True, null=True)  # Atribut kategori product
+    #image = models.ImageField(upload_to='items/', blank=True, null=True)  # Atribut gambar product
 
     def __str__(self):
         return self.name
