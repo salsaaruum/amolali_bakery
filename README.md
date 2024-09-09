@@ -36,7 +36,7 @@ Jawaban:
 
 
 
-- 3. Jelaskan fungsi git dalam pengembangan perangkat lunak!
+## 3. Jelaskan fungsi git dalam pengembangan perangkat lunak!
 Jawaban:  
 - Merekam / menyimpan perubahan kode : Git memungkinkan untuk merekam atau menyimpan setiap perubahan pada kode yang disimpan dalam bentuk commit sehingga memudahkan untuk melihat siapa yang melakukan perubahan, apa, dan kapan perubahan dilakukan
 - Kolaborasi tim : Git memungkinkan beberapa pengembang kerja secara bersamaan pada proyek yang sama, terdapat fitur branching dan merging untuk kolaborasi yang lebih mudah dengan memisahkan perubahan yang sedang dikerjakan pada fitur tertentu sebelum digabung ke kode utama
