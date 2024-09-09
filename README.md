@@ -45,7 +45,7 @@ e. Integrasi dengan CI/CD: Git sering digunakan bersama dengan alat Continuous I
 4. Menurut Anda, dari semua framework yang ada, mengapa framework Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?
 Jawaban:
 a. Bersifat "Batteries Included" : django menyediakan fitur bawaan yang bisa digunakan tanpa memerlukan konfigurasi tambahan seperti autentikasi, pengelolaan databse, pengiriman email sehingga memudahkan pemula menggunakannya dan fokus pada logika aplikasi
-b. Mengajarkan konsep pengembangan wen :
+b. Mengajarkan konsep pengembangan web :
 > MVT (Model View Template) : Membantu pemula memahami pemisahan antara data, logika bisnis, dan tampilan/interface
 > ORM (Object Relational Mapping) : Django menggunakan ORM untuk berinteraksi dengan datase sehingga pemula tidak perlu menulis quey SQL secara manual
 > Routing dan URL Mapping : Membantu untuk memahami dasar bagaimana URL dipetakan ke fungsi atau tampilan di aplikasi web
