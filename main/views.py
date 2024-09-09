@@ -9,5 +9,3 @@ def show_main(request):
     }
 
     return render(request, "main.html", {'blueberry_cheesecake': blueberry_cheesecake})
-
-# Create your views here.
