@@ -1,5 +1,11 @@
 # Tugas 3
 ## 1. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
+Data delivery atau pengiriman data sangat penting dalam implementasi platform karena platform harus berinteraksi dengan pengguna dan sistem lain melalui sebuah data :
+- Interaksi dengan pengguna : Data delivery memastikan bahwa komunikasi terjadi secara efisien karena pengguna mengirimkan dan menerima data terus menerus.
+- Sinkronisasi data antar sistem : Platform bergantung pada integrasi dengan sistem eksternal seperti API pihak ketiga atau layanan cloud. Data delivery memastikan adanya sinkronisasi antara platform dan sistem lain berjalan lancar.
+- Pengambilan keputusan Real-Time : Platform membutuhkan data yang dikirim secara real-time untuk memberi respon langsung pada pengguna.
+- Keamanan dan privasi : Data delivery mencakup pengiriman data yang aman. Menggunakan metode eknripsi yang baik memastikan bahwa data sampai tanpa resiko kebocoran atau penyalahgunaan.
+- Pengelolaan skala besar : Platform besar harus menangani sejumlah pengiriman data dalam jumlah besar dari jutaan pengguna atau perangkat. Data delivery yang efisien memastikan bahwa platform dapat beroperasi dengan baik dibawah beban tinggi
 
 ## 2. Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
 
@@ -11,16 +17,16 @@
 
 ## Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam README.md.
 - format xml :
-https://github.com/salsaaruum/amolali_bakery/blob/main/ScreenshotXML_SalsabilaArumdapta.png
+![](https://github.com/salsaaruum/amolali_bakery/blob/main/ScreenshotXML_SalsabilaArumdapta.png)
 
 - format json :
-https://github.com/salsaaruum/amolali_bakery/blob/main/ScreenshotJSON_SalsabilaArumdapta.png
+![](https://github.com/salsaaruum/amolali_bakery/blob/main/ScreenshotJSON_SalsabilaArumdapta.png)
 
 - format xml dengan id :
-https://github.com/salsaaruum/amolali_bakery/blob/main/ScreenshotXML_ID_SalsabilaArumdapta.png
+![](https://github.com/salsaaruum/amolali_bakery/blob/main/ScreenshotXML_ID_SalsabilaArumdapta.png)
 
 - format json dengan id :
-https://github.com/salsaaruum/amolali_bakery/blob/main/ScreenshotJSON_ID_SalsabilaArumdapta.png
+![](https://github.com/salsaaruum/amolali_bakery/blob/main/ScreenshotJSON_ID_SalsabilaArumdapta.png)
 
 
 
