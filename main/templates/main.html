@@ -1,37 +1,45 @@
-<h1>Amolali Bakery</h1>
-<h3>Salsabila Arumdapta - PBP A - 2306245560</h3>
+{% extends 'base.html' %}
+{% block content %}
 
-<h5>Name: </h5>
-<p>{{ blueberry_cheesecake.name }}</p> <!-- nama menu -->
-<h5>Price: </h5>
-<p>{{ blueberry_cheesecake.price }}</p> <!-- harga per pcs -->
-<h5>Description: </h5>
-<p>{{ blueberry_cheesecake.description }}</p> <!-- deskripsi menu -->
-<h5>Category: </h5>
-<p>{{ blueberry_cheesecake.category }}</p> <!--kategori menu -->
-<img src="{{blueberry_cheesecake.image}}" style = 'width: 200; height: 200;'>
-<p>{{ blueberry_cheesecake.space }}</p> <!--untuk jarak pemisah-->
+<h5>NPM: </h5>
+<p>{{ npm }}<p>
 
-<h5>Name: </h5>
-<p>{{ tiramisu.name }}</p> <!-- nama menu -->
-<h5>Price: </h5>
-<p>{{ tiramisu.price }}</p> <!-- harga per pcs -->
-<h5>Description: </h5>
-<p>{{ tiramisu.description }}</p> <!-- deskripsi menu -->
-<h5>Category: </h5>
-<p>{{ tiramisu.category }}</p> <!--kategori menu -->
-<img src="{{tiramisu.image}}" style = 'width: 200; height: 200;'>
-<p>{{ tiramisu.space }}</p> <!--untuk jarak pemisah-->
+<h5>Name:</h5>
+<p>{{ name }}</p>
 
-<h5>Name: </h5>
-<p>{{ croissant.name }}</p> <!-- nama menu -->
-<h5>Price: </h5>
-<p>{{ croissant.price }}</p> <!-- harga per pcs -->
-<h5>Description: </h5>
-<p>{{ croissant.description }}</p> <!-- deskripsi menu -->
-<h5>Category: </h5>
-<p>{{ croissant.category }}</p> <!--kategori menu -->
-<img src="{{croissant.image}}" style = 'width: 200; height: 200;'>
-<p>{{ croissant.space }}</p> <!--untuk jarak pemisah-->
+<h5>Class:</h5>
+<p>{{ class }}</p>
 
+{% if not product_entries %}
+<p>Belum ada data product pada amolali bakery.</p>
+{% else %}
+<table>
+  <tr>
+    <th>Product Name</th>
+    <th>Price</th>
+    <th>Description</th>
+    <th>Category</th>
+    <th>Image</th>
+  </tr>
 
+  {% comment %} Berikut cara memperlihatkan data product di bawah baris ini 
+  {% endcomment %} 
+  {% for product in product_entries %}
+  <tr>
+    <td>{{product.name}}</td>
+    <td>{{product.price}}</td>
+    <td>{{product.description}}</td>
+    <td>{{product.category}}</td>
+    <td><img src="{{product.image}}" alt="{{product.name}}" style="width: 200px; height: 200px;"></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+<br />
+
+<a href="{% url 'main:create_product' %}">
+  <button>Add New Product</button>
+</a>
+
+{% endblock content %}

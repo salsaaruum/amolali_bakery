@@ -1,30 +1,44 @@
-from django.shortcuts import render
+from django.http import HttpResponse
+from django.core import serializers
+from django.shortcuts import render, redirect   # Tambahkan import redirect di baris ini
+from main.forms import ProductForm
+from main.models import Product
+
 
 def show_main(request):
-    blueberry_cheesecake = {
-        'name' : 'Blueberry Cheesecake',
-        'price': 30000,
-        'description': 'Cheesecake lembut creamy dengan topping saus blueberry',
-        'category' : 'Dessert',
-        'image' : 'https://assets.makobakery.com/cdn/web/product_photo/1621578219_blueberry-cheesecake-slice.jpg',
-        'space' : '========================================================================================================================='
+    product_entries = Product.objects.all()
+
+    context = {
+        'name': 'Salsabila Arumdapta',
+        'class': 'PBP A',
+        'npm': '2306245560',
+        'product_entries': product_entries
     }
 
-    tiramisu = {
-        'name' : 'Tiramisu',
-        'price': 60000,
-        'description': 'Tiramisu dengan tekstur yang lembut dan rasa yang menyegarkan, menjadikannya salah satu hidangan penutup favorit',
-        'category' : 'Dessert',
-        'image' : 'https://nibble-images.b-cdn.net/nibble/original_images/tiramisu_paling_enak_di_jakarta_1_9e8705662b_qhG4omixx.jpg',
-        'space' : '========================================================================================================================='
-    }
+    return render(request, "main.html", context)
 
-    croissant = {
-        'name' : 'Croissant',
-        'price': 25000,
-        'description': 'Makanan khas Prancis dengan rasa butter klasik',
-        'category' : 'Dessert',
-        'image' : 'https://www.aliceboulangerie.com.sg/wp-content/uploads/2023/01/Classic-Croissant--scaled.jpg',
-        'space' : '========================================================================================================================='
-    }
-    return render(request, "main.html", {'blueberry_cheesecake': blueberry_cheesecake, 'tiramisu': tiramisu, 'croissant': croissant})
+def create_product_entry(request):
+    form = ProductForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return redirect('main:show_main')
+
+    context = {'form': form}
+    return render(request, "create_product.html", context)
+
+def show_xml(request):
+    data = Product.objects.all()
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_json(request):
+    data = Product.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_xml_by_id(request, id):
+    data = Product.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_json_by_id(request, id):
+    data = Product.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
