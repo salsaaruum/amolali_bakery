@@ -124,4 +124,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Untuk Push Github dan PWS sekaligus
 CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://pbp.cs.ui.ac.id/web/project/salsabila.arumdapta/amolalibakery", "https://pbp.cs.ui.ac.id/web/project/salsabila.arumdapta/amolalibakery"]
