@@ -19,9 +19,9 @@
   <tr>
     <th>Product Name</th>
     <th>Price</th>
-    <th>Description</th>
-    <th>Category</th>
     <th>Image</th>
+    <th>Category</th>
+    <th>Description</th>
   </tr>
 
   {% comment %} Berikut cara memperlihatkan data product di bawah baris ini 
@@ -30,9 +30,9 @@
   <tr>
     <td>{{product.name}}</td>
     <td>{{product.price}}</td>
-    <td>{{product.description}}</td>
-    <td>{{product.category}}</td>
     <td><img src="{{product.image}}" alt="{{product.name}}" style="width: 200px; height: 200px;"></td>
+    <td>{{product.category}}</td>
+    <td>{{product.description}}</td>
   </tr>
   {% endfor %}
 </table>
