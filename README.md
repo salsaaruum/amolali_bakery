@@ -255,7 +255,8 @@ from main.views import show_main, create_product_entry
 - format json dengan id :
 ![](https://github.com/salsaaruum/amolali_bakery/blob/main/ScreenshotJSON_ID_SalsabilaArumdapta.png)
 
-
+## Link Deploy PWS :
+    https://salsabila-arumdapta-amolalibakery.pbp.cs.ui.ac.id
 
 
 # Tugas 2
