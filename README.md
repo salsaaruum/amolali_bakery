@@ -25,7 +25,7 @@ Secara keseluruhan, JSON lebih populer karena jauh lebih cepat, ringan, dan coco
 
 ## 3. Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
 Jawaban :
-Method is_valid() pada form django berfungsi untuk memvalidasi input data dan memastikan bahwa data yang dimasukkan sesuai dengan aturan validasi yang ditentukan di form
+Method is_valid() pada form Django berfungsi untuk memvalidasi input data dan memastikan bahwa data yang dimasukkan sesuai dengan aturan validasi yang ditentukan di form
 - Memvalidasi input data : is_valid() untuk memeriksa apakaha data yang diinput pengguna sudah memenuhi syarat validasi yang didefinisikan pada form seperti tipe data, format email yang valid, maksimum karakter, dll
 - Menandai field yang invalid : Jika terdapat data yang tidak valid maka is_valid() akan mengembalikan False dan otomatis menampilkan pesan kesalahan ke form 
 
@@ -37,13 +37,13 @@ Lalu mengapa kita butuh is_valid()?
 
 ## 4. Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
 Jawaban :
-CSRF atau Cross-Site Request Forgery adalah jenis serangan yang memaksa pengguna untuk melakukan tindakan yang tidak diinginkan pada aplikasi web yang sudah terautentikasi. csrt_token ini berguna untuk melindungi aplikasi django dari serangan CSRF. 
+CSRF atau Cross-Site Request Forgery adalah jenis serangan yang memaksa pengguna untuk melakukan tindakan yang tidak diinginkan pada aplikasi web yang sudah terautentikasi. csrt_token ini berguna untuk melindungi aplikasi Django dari serangan CSRF. 
 
 Mengapa kita butuh csrf_token? 
 csrf_token adalah token keamanan untuk melindungi aplikasi dari serangan CSRF. Hal ini untuk memastikan bahwa request yang dibuat oleh server benar-benar berasal dari pemiliki yang sah bukan eksternal lain yang jahat. Django secara otomatis menghasilkan token CSRF yang unik untuk tiap sesi pengguna dan memasukkannya ke form HTML. Token ini harus dikirim bersama data dorm saat pengguna mengirim request POST. Jika token valid, maka request ianggap aman. jika tidak, request akan ditolak.
 
 Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django?
-Jika form django tidak memiliki csrf_token, maka django akan **rentan terhadap serangan CSRF**. Penyerang bisa saja memanfaatkan sesi yang sudah aktif (login) untuk mengubah kata sandi, hapus akun tanpa sepengetahuan pengguna. 
+Jika form Django tidak memiliki csrf_token, maka Django akan **rentan terhadap serangan CSRF**. Penyerang bisa saja memanfaatkan sesi yang sudah aktif (login) untuk mengubah kata sandi, hapus akun tanpa sepengetahuan pengguna. 
 
 Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
 Penyerang bisa menggunakan teknik mengirim link berbahaya melalui email atau media sosial untuk mengarahkan korban ke halaman yang membuka akses untuk memicu permintaan otomatis ke aplikasi web yang di targetkan. Kedua, penyerang bisa membuat form tersembunyi di situs mereka yang mengirimkan permintaan POST ke aplikasi web di mana pengguna sudah terautentikasi. Penyerang juga bisa memanfaatkan gambar atau iframe yang mengarahkan ke URL tersebut dan melancarkan aksi.
@@ -53,7 +53,193 @@ Pada intinya, csrf_token berfungsi sebagai pelindung aplikasi web dari serangan 
 
 ## 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 Jawaban :
+1. Pertama, buat folder/direktori 'templates' pada root utama folder dan buat berkas 'base.html'. Berkas ini berfungsi sebagai template dasar untuk kerangka umum untuk halaman web (tampilan utama) pada proyek yang sedang dibuat. Dalam file ini terdapat baris-baris yang berfungsi untuk membuat data secara dinamis dari Django ke HTML.
+2. Kemudian, buka  'settings.py' pada direktori amolali_bakery, tambahkan kode untuk baris 'DIRS' menjadi "'DIRS': [BASE_DIR / 'templates']," agar file base.html terdeteksi sebagai template
+3. Buka folder main/templates, kemudian ubah kode pada file 'main.html' menjadi seperti ini utnuk extend file 'base.html':
+{% extends 'base.html' %}
+{% block content %}
 
+<h1> Amolali Bakery </h1>
+
+<h5>NPM: </h5>
+<p>{{ npm }}<p>
+
+<h5>Name:</h5>
+<p>{{ name }}</p>
+
+<h5>Class:</h5>
+<p>{{ class }}</p>
+{% endblock content %}
+
+4. Ubah primary key dari integer menjadi UUID, import uuid pada file 'models.py' menjadi seperti ini :
+import uuid #tambahkan baris ini di paling atas
+from django.db import models
+
+class Product(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  # tambahkan baris ini juga
+    name = models.CharField(max_length=255)  # Atribut nama product
+    price = models.IntegerField()  # Atribut harga product
+    description = models.TextField()  # Atribut deskripsi product
+    category = models.CharField(max_length=100, blank=True, null=True)  # Atribut kategori product
+    image = models.URLField()  # Atribut gambar product
+
+    def __str__(self):
+        return self.name
+image = models.URLField(), field ini untuk menambahkan gambar menggunakan link yang berasal dari internet 
+
+5. Kemudian lalukan migration dan migrate menggunakan perintah :
+python3 manage.py makemigrations
+python3 manage.py migrate
+
+6. Buat form untuk input data dan menampilkan product yang sudah ditambahkan pada form input data. Buat file baru pada folder main dengan nama 'forms.py', tambahkan kode berikut :
+from django.forms import ModelForm
+from main.models import Product
+
+class ProductForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = ["name", "price", "description", "category", "image"]
+
+7. Buka file 'views.py' lalu tambahkan import :
+from django.shortcuts import render, redirect #Tambahkan import redirect di baris ini
+from main.forms import ProductForm
+from main.models import Product
+
+buatlah fungsi untuk menerima parameter request :
+def create_product_entry(request):
+    form = ProductForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return redirect('main:show_main')
+
+    context = {'form': form}
+    return render(request, "create_product.html", context)
+
+sesuaikan baris kode pada fungsi show_main untuk mengambil seluruh objek Product yang tersimpan di database : 
+def show_main(request):
+    product_entries = Product.objects.all()
+
+8. Buka file 'urls.py' pada folder/direktori 'main' kemudian import fungsi create_product_entry menjadi :
+from main.views import show_main, create_product_entry
+9. Tambahkan path URL ke dalam variabel urlpatterns di 'urls.py' di folder 'main'
+urlpatterns = [
+    path('', show_main, name='show_main'),
+    path('create-product', create_product_entry, name='create_product'),
+]
+10. Buat file baru yang saya beri nama 'create_product.html' di folder/direktori main/templates
+{% extends 'base.html' %} 
+{% block content %}
+<h1>Add New Product</h1>
+
+<form method="POST">
+  {% csrf_token %}
+  <table>
+    {{ form.as_table }}
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Add Product" />
+      </td>
+    </tr>
+  </table>
+</form>
+
+{% endblock %}
+
+11. Buka file 'main.html' lalu tambahkan kode ini di dalam {% block content %} untuk menampilkan data product ke dalam bentuk tabel dan menampilkan tombol 'Add New Product'
+....
+{% if not product_entries %}
+<p>Belum ada data product pada amolali bakery.</p>
+{% else %}
+<table>
+  <tr>
+    <th>Product Name</th>
+    <th>Price</th>
+    <th>Image</th>
+    <th>Category</th>
+    <th>Description</th>
+  </tr>
+
+  {% comment %} Berikut cara memperlihatkan data product di bawah baris ini 
+  {% endcomment %} 
+  {% for product in product_entries %}
+  <tr>
+    <td>{{product.name}}</td>
+    <td>{{product.price}}</td>
+    <td><img src="{{product.image}}" alt="{{product.name}}" style="width: 200px; height: 200px;"></td>
+    <td>{{product.category}}</td>
+    <td>{{product.description}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+<br />
+
+<a href="{% url 'main:create_product' %}">
+  <button>Add New Product</button>
+</a>
+
+{% endblock content %}
+
+'<td><img src="{{product.image}}" alt="{{product.name}}" style="width: 200px; height: 200px;"></td>'
+    <td>{{product.category}}</td>, baris kode ini berfungsi untuk menampilkan link foto menjadi foto yang diinginkan pada tampilan halaman utama
+
+10. Kemudian, jalankan Django dengan perintah 'python3 manage.py runserver' dan akses dengan link http://localhost:8000/ untuk mencoba mulai menambahkan product
+
+11. Buat kode untuk mengembalikan data dalam bentuk XML 
+    - Buka file 'views.py' pada folder/direktori 'main' dan tambahkan import :
+        from django.http import HttpResponse
+        from django.core import serializers
+    - Buat fungsi baru untuk menerima parameter show_xml
+        def show_xml(request):
+            data = Product.objects.all()
+            return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+    - Buka file 'urls.py' pada folder main lalu import fungsi yang dibuat tadi :
+        from main.views import show_main, create_product_entry, show_xml
+    - Tambahkan path url nya ke urlpatterns:
+        ...
+        path('xml/', show_xml, name='show_xml'),
+        ...
+    - Jalankan proyek Django dengan perintah 'python3 manage.py runserver' dan buka dengan link http://localhost:8000/xml/
+
+12. Buat kode untuk mengembalikan data dalam bentuk JSON
+    - Buat fungsi baru untuk menerima parameter show_xml
+        def show_json(request):
+            data = Product.objects.all()
+            return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    - Buka file 'urls.py' pada folder main lalu import fungsi yang dibuat tadi :
+        from main.views import show_main, create_product_entry, show_xml, show_json
+    - Tambahkan path url nya ke urlpatterns:
+        ...
+        path('json/', show_json, name='show_json'),
+        ...
+    - Jalankan proyek Django dengan perintah 'python3 manage.py runserver' dan buka dengan link http://localhost:8000/json/
+
+13. Buat kode untuk mengembalikan data menggunakan ID dalam bentuk XML ataupun JSON
+    - untuk XML :
+        def show_xml_by_id(request, id):
+            data = Product.objects.filter(pk=id)
+            return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+    - untuk JSON:
+        def show_json_by_id(request, id):
+            data = Product.objects.filter(pk=id)
+            return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    - Buka file 'urls.py' pada folder main lalu import fungsi yang dibuat tadi :
+        from main.views import show_main, create_product_entry, show_xml, show_json, show_xml_by_id, show_json_by_id
+    - Tambahkan path url nya ke urlpatterns:
+        ...
+        path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
+        path('json/<str:id>/', show_json_by_id, name='show_json_by_id'),
+        ...
+    - Jalankan proyek Django dengan perintah 'python3 manage.py runserver' dan buka dengan link http://localhost:8000/xml/[id]/ ataupun http://localhost:8000/json/[id]/, masukkan id proyek yang ingin ditampilkan didalam kotak id '[id]'
+
+14. Untuk mengakses menggunakan Postman sebagai Data viewer cukup ikuti langkah ini :
+    - Pastikan server sudah berjalan dengan perintah 'python3 manage.py runserver'.
+    - Buka Postman dan buatlah sebuah request baru dengan method GET dan url http://localhost:8000/xml/ atau http://localhost:8000/json/ untuk mengetes apakah data terkirimkan dengan baik.
+    - Klik tombol Send untuk mengirimkan request tersebut.
+    - Hasilnya dapat dilihat seperti pada screenshot dibawah ini mencari menggunakan tampilan XML, JSON, atau menggunakan ID dalam bentuk XML ataupun JSON
 
 
 ## Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam README.md.
@@ -81,12 +267,12 @@ Jawaban :
 - Masukkan seluruh konfigurasi pengguna dan email, kemudian verifikasi konfigurasi 
 - Selanjutnya buat branch utama dengan perintah "git branch -M main"
 - Hubungkan folder/direktori lokal dengan repositori Github dengan perintah "git remote add origin https://github.com/salsaaruum/amolali_bakery.git"
-- Selanjutnya lakukan instalasi django dan insiasi django, pada terminal yang sama jalankan perintah "python3 -m venv env"
+- Selanjutnya lakukan instalasi Django dan insiasi Django, pada terminal yang sama jalankan perintah "python3 -m venv env"
 - Kemudian aktifkan virtual environment dengan menjalankan perintah "source env/bin/active"
-- Siapkan berkas requirements.txt lalu install dengan perintah "pip install -r requirements.txt", kemudian buat proyek django "django-admin startproject amolali_bakery ."
+- Siapkan berkas requirements.txt lalu install dengan perintah "pip install -r requirements.txt", kemudian buat proyek Django "Django-admin startproject amolali_bakery ."
 - Lakukan konfigurasi dan jalankan server dengan menambahkan string pada file settings.py "ALLOWED_HOSTS = ["localhost", "127.0.0.1"]"
-- Kemudian jalankan server django dengan melakukan perintah "python3 manage.py runserver"
-- Cek, jika sudah muncul animasi rocket pada http://localhost:8000, maka aplikasi django sudah berhasil dibuat
+- Kemudian jalankan server Django dengan melakukan perintah "python3 manage.py runserver"
+- Cek, jika sudah muncul animasi rocket pada http://localhost:8000, maka aplikasi Django sudah berhasil dibuat
 - Klik ctrl + C pada keyboard untuk mematikan virtual environment
 - Buat berkas ".gitignore" untuk menentukan berkas dan direktori mana yang harus diabaikan oleh Git
 - Kemudian saya lakukan add, commit, dan push
@@ -97,9 +283,9 @@ Jawaban :
 - Lalu ubah berkas models.py pada aplikasi main sesuai dengan kebutuhan dengan nama class "Product" sesuai ketentuan tugas
 - Lakukan migrasi model dengan perintah "python3 manage.py makemigrations" kemudian lakukan migrasi ke dalam basis data lokal dengan perintah "python3 manage.py migrate"
 - Buka file views.py pada aplikasi 'main' lalu tambahkan fungsi show_main dan saya sesuaikan dengan tugas saya
-- Buka file "main.html" dan modifikasi dengan sintaks django untuk menampilkan nilai dari variabel yang sudah didefinisikan
+- Buka file "main.html" dan modifikasi dengan sintaks Django untuk menampilkan nilai dari variabel yang sudah didefinisikan
 - Lakukan konfigurasi routing dengan cara membuat berkas "urls.py" di dalam folder main lalu tambahkan "include" untuk menghubungkan ke tampilan main
-- Jalankan lagi proyek django dengan perintah "python3 manage.py runserver" lalu cek apakah muncul animasi rocket pada "http://localhost:8000/" atau tidak
+- Jalankan lagi proyek Django dengan perintah "python3 manage.py runserver" lalu cek apakah muncul animasi rocket pada "http://localhost:8000/" atau tidak
 - Selamat proyek Tugas Individu 2 sudah selesai. Tidak lupa untuk melakukan add, commit, dan push untuk update isi repositori amolali_bakery pada Github 
 - Tidak lupa untuk melakukan deploy pada PWS dengan cara yang sama seperti pada Github, yaitu dengan cara membuat proyek baru dengan menu "Create New Project"
 - Masukkan nama project kemudian lakukan perintah pada project command PWS dengan mengatur remote, mengubah branch dari 'main' ke 'master' dan langkah terakhir lakukan perintah 'push pws master'
@@ -123,7 +309,7 @@ Jawaban:
 
 ## 4. Menurut Anda, dari semua framework yang ada, mengapa framework Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?
 Jawaban:
-- Bersifat "Batteries Included" : django menyediakan fitur bawaan yang bisa digunakan tanpa memerlukan konfigurasi tambahan seperti autentikasi, pengelolaan database, pengiriman email sehingga memudahkan pemula menggunakannya dan fokus pada logika aplikasi
+- Bersifat "Batteries Included" : Django menyediakan fitur bawaan yang bisa digunakan tanpa memerlukan konfigurasi tambahan seperti autentikasi, pengelolaan database, pengiriman email sehingga memudahkan pemula menggunakannya dan fokus pada logika aplikasi
 - Mengajarkan konsep pengembangan web :
     - MVT (Model View Template) : Membantu pemula memahami pemisahan antara data, logika bisnis, dan tampilan/interface
     - ORM (Object Relational Mapping) : Django menggunakan ORM untuk berinteraksi dengan datase sehingga pemula tidak perlu menulis quey SQL secara manual
