@@ -1,5 +1,6 @@
 # Tugas 3
 ## 1. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
+Jawaban :
 Data delivery atau pengiriman data sangat penting dalam implementasi platform karena platform harus berinteraksi dengan pengguna dan sistem lain melalui sebuah data :
 - **Interaksi dengan pengguna** : Data delivery memastikan bahwa komunikasi terjadi secara efisien karena pengguna mengirimkan dan menerima data terus menerus.
 - **Sinkronisasi data antar sistem** : Platform bergantung pada integrasi dengan sistem eksternal seperti API pihak ketiga atau layanan cloud. Data delivery memastikan adanya sinkronisasi antara platform dan sistem lain berjalan lancar.
@@ -8,6 +9,7 @@ Data delivery atau pengiriman data sangat penting dalam implementasi platform ka
 - **Pengelolaan skala besar** : Platform besar harus menangani sejumlah pengiriman data dalam jumlah besar dari jutaan pengguna atau perangkat. Data delivery yang efisien memastikan bahwa platform dapat beroperasi dengan baik dibawah beban tinggi
 
 ## 2. Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+Jawaban : 
 JSON(JavaScript Object Notation) lebih populer daripada XML(Extensible Markup Language) karena beberapa alasan :
 - **Sintaksis** pada JSON lebih padat dan lebih mudah dibaca serta ditulis dibandingkan dengan XML yang mengganti beberapa karakter untuk referensi entitas sehingga jauh lebih rumit daripada JSON.
 - **Ukuran** JSON umumnya lebih ringkas karena tidak memerlukan tag penutup berulang '<tag></tag>' seperti XML sehingga menghemat bandwith dan mempercepat transfer data
@@ -22,6 +24,7 @@ Namun, XML masih digunakan dalam beberapa kasus tertentu, misalnya untuk:
 Secara keseluruhan, JSON lebih populer karena jauh lebih cepat, ringan, dan cocok untuk digunakan aplikasi web modern, sedangkan XML lebih sering digunakan dalam konteks yang memerlukan markup yang lebih kaya dan validasi yang ketat
 
 ## 3. Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+Jawaban :
 Method is_valid() pada form django berfungsi untuk memvalidasi input data dan memastikan bahwa data yang dimasukkan sesuai dengan aturan validasi yang ditentukan di form
 - Memvalidasi input data : is_valid() untuk memeriksa apakaha data yang diinput pengguna sudah memenuhi syarat validasi yang didefinisikan pada form seperti tipe data, format email yang valid, maksimum karakter, dll
 - Menandai field yang invalid : Jika terdapat data yang tidak valid maka is_valid() akan mengembalikan False dan otomatis menampilkan pesan kesalahan ke form 
@@ -33,9 +36,24 @@ Lalu mengapa kita butuh is_valid()?
 
 
 ## 4. Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+Jawaban :
+CSRF atau Cross-Site Request Forgery adalah jenis serangan yang memaksa pengguna untuk melakukan tindakan yang tidak diinginkan pada aplikasi web yang sudah terautentikasi. csrt_token ini berguna untuk melindungi aplikasi django dari serangan CSRF. 
+
+Mengapa kita butuh csrf_token? 
+csrf_token adalah token keamanan untuk melindungi aplikasi dari serangan CSRF. Hal ini untuk memastikan bahwa request yang dibuat oleh server benar-benar berasal dari pemiliki yang sah bukan eksternal lain yang jahat. Django secara otomatis menghasilkan token CSRF yang unik untuk tiap sesi pengguna dan memasukkannya ke form HTML. Token ini harus dikirim bersama data dorm saat pengguna mengirim request POST. Jika token valid, maka request ianggap aman. jika tidak, request akan ditolak.
+
+Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django?
+Jika form django tidak memiliki csrf_token, maka django akan **rentan terhadap serangan CSRF**. Penyerang bisa saja memanfaatkan sesi yang sudah aktif (login) untuk mengubah kata sandi, hapus akun tanpa sepengetahuan pengguna. 
+
+Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+Penyerang bisa menggunakan teknik mengirim link berbahaya melalui email atau media sosial untuk mengarahkan korban ke halaman yang membuka akses untuk memicu permintaan otomatis ke aplikasi web yang di targetkan. Kedua, penyerang bisa membuat form tersembunyi di situs mereka yang mengirimkan permintaan POST ke aplikasi web di mana pengguna sudah terautentikasi. Penyerang juga bisa memanfaatkan gambar atau iframe yang mengarahkan ke URL tersebut dan melancarkan aksi.
+
+Pada intinya, csrf_token berfungsi sebagai pelindung aplikasi web dari serangan CSRF yang dapat merugikan pengguna seperti kehilangan akun, password yang diganti tanpa sepengetahuan pengguna, transaksi yang tidak diingiinkan, pengubahan data dan masih banyak lagi
 
 
 ## 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+Jawaban :
+
 
 
 ## Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam README.md.
