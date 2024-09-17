@@ -56,135 +56,135 @@ Jawaban :
 1. Pertama, buat folder/direktori 'templates' pada root utama folder dan buat berkas 'base.html'. Berkas ini berfungsi sebagai template dasar untuk kerangka umum untuk halaman web (tampilan utama) pada proyek yang sedang dibuat. Dalam file ini terdapat baris-baris yang berfungsi untuk membuat data secara dinamis dari Django ke HTML.
 2. Kemudian, buka  'settings.py' pada direktori amolali_bakery, tambahkan kode untuk baris 'DIRS' menjadi "'DIRS': [BASE_DIR / 'templates']," agar file base.html terdeteksi sebagai template
 3. Buka folder main/templates, kemudian ubah kode pada file 'main.html' menjadi seperti ini utnuk extend file 'base.html':
-{% extends 'base.html' %}
-{% block content %}
+    {% extends 'base.html' %}
+    {% block content %}
 
-<h1> Amolali Bakery </h1>
+    <h1> Amolali Bakery </h1>
 
-<h5>NPM: </h5>
-<p>{{ npm }}<p>
+    <h5>NPM: </h5>
+    <p>{{ npm }}<p>
 
-<h5>Name:</h5>
-<p>{{ name }}</p>
+    <h5>Name:</h5>
+    <p>{{ name }}</p>
 
-<h5>Class:</h5>
-<p>{{ class }}</p>
-{% endblock content %}
+    <h5>Class:</h5>
+    <p>{{ class }}</p>
+    {% endblock content %}
 
 4. Ubah primary key dari integer menjadi UUID, import uuid pada file 'models.py' menjadi seperti ini :
-import uuid #tambahkan baris ini di paling atas
-from django.db import models
+    import uuid #tambahkan baris ini di paling atas
+    from django.db import models
 
-class Product(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  # tambahkan baris ini juga
-    name = models.CharField(max_length=255)  # Atribut nama product
-    price = models.IntegerField()  # Atribut harga product
-    description = models.TextField()  # Atribut deskripsi product
-    category = models.CharField(max_length=100, blank=True, null=True)  # Atribut kategori product
-    image = models.URLField()  # Atribut gambar product
+    class Product(models.Model):
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  # tambahkan baris ini juga
+        name = models.CharField(max_length=255)  # Atribut nama product
+        price = models.IntegerField()  # Atribut harga product
+        description = models.TextField()  # Atribut deskripsi product
+        category = models.CharField(max_length=100, blank=True, null=True)  # Atribut kategori product
+        image = models.URLField()  # Atribut gambar product
 
-    def __str__(self):
-        return self.name
-image = models.URLField(), field ini untuk menambahkan gambar menggunakan link yang berasal dari internet 
+        def __str__(self):
+            return self.name
+'image = models.URLField()', field ini untuk menambahkan gambar menggunakan link yang berasal dari internet 
 
 5. Kemudian lalukan migration dan migrate menggunakan perintah :
-python3 manage.py makemigrations
-python3 manage.py migrate
+    python3 manage.py makemigrations
+    python3 manage.py migrate
 
 6. Buat form untuk input data dan menampilkan product yang sudah ditambahkan pada form input data. Buat file baru pada folder main dengan nama 'forms.py', tambahkan kode berikut :
-from django.forms import ModelForm
-from main.models import Product
+    from django.forms import ModelForm
+    from main.models import Product
 
-class ProductForm(ModelForm):
-    class Meta:
-        model = Product
-        fields = ["name", "price", "description", "category", "image"]
+    class ProductForm(ModelForm):
+        class Meta:
+            model = Product
+            fields = ["name", "price", "description", "category", "image"]
 
 7. Buka file 'views.py' lalu tambahkan import :
-from django.shortcuts import render, redirect #Tambahkan import redirect di baris ini
-from main.forms import ProductForm
-from main.models import Product
+    from django.shortcuts import render, redirect #Tambahkan import redirect di baris ini
+    from main.forms import ProductForm
+    from main.models import Product
 
 buatlah fungsi untuk menerima parameter request :
-def create_product_entry(request):
-    form = ProductForm(request.POST or None)
+    def create_product_entry(request):
+        form = ProductForm(request.POST or None)
 
-    if form.is_valid() and request.method == "POST":
-        form.save()
-        return redirect('main:show_main')
+        if form.is_valid() and request.method == "POST":
+            form.save()
+            return redirect('main:show_main')
 
-    context = {'form': form}
-    return render(request, "create_product.html", context)
+        context = {'form': form}
+        return render(request, "create_product.html", context)
 
 sesuaikan baris kode pada fungsi show_main untuk mengambil seluruh objek Product yang tersimpan di database : 
-def show_main(request):
-    product_entries = Product.objects.all()
+    def show_main(request):
+        product_entries = Product.objects.all()
 
 8. Buka file 'urls.py' pada folder/direktori 'main' kemudian import fungsi create_product_entry menjadi :
 from main.views import show_main, create_product_entry
 9. Tambahkan path URL ke dalam variabel urlpatterns di 'urls.py' di folder 'main'
-urlpatterns = [
-    path('', show_main, name='show_main'),
-    path('create-product', create_product_entry, name='create_product'),
-]
+    urlpatterns = [
+        path('', show_main, name='show_main'),
+        path('create-product', create_product_entry, name='create_product'),
+    ]
 10. Buat file baru yang saya beri nama 'create_product.html' di folder/direktori main/templates
-{% extends 'base.html' %} 
-{% block content %}
-<h1>Add New Product</h1>
+    {% extends 'base.html' %} 
+    {% block content %}
+    <h1>Add New Product</h1>
 
-<form method="POST">
-  {% csrf_token %}
-  <table>
-    {{ form.as_table }}
-    <tr>
-      <td></td>
-      <td>
-        <input type="submit" value="Add Product" />
-      </td>
-    </tr>
-  </table>
-</form>
+    <form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+        <td></td>
+        <td>
+            <input type="submit" value="Add Product" />
+        </td>
+        </tr>
+    </table>
+    </form>
 
-{% endblock %}
+    {% endblock %}
 
 11. Buka file 'main.html' lalu tambahkan kode ini di dalam {% block content %} untuk menampilkan data product ke dalam bentuk tabel dan menampilkan tombol 'Add New Product'
-....
-{% if not product_entries %}
-<p>Belum ada data product pada amolali bakery.</p>
-{% else %}
-<table>
-  <tr>
-    <th>Product Name</th>
-    <th>Price</th>
-    <th>Image</th>
-    <th>Category</th>
-    <th>Description</th>
-  </tr>
+    ....
+    {% if not product_entries %}
+    <p>Belum ada data product pada amolali bakery.</p>
+    {% else %}
+    <table>
+    <tr>
+        <th>Product Name</th>
+        <th>Price</th>
+        <th>Image</th>
+        <th>Category</th>
+        <th>Description</th>
+    </tr>
 
-  {% comment %} Berikut cara memperlihatkan data product di bawah baris ini 
-  {% endcomment %} 
-  {% for product in product_entries %}
-  <tr>
-    <td>{{product.name}}</td>
-    <td>{{product.price}}</td>
-    <td><img src="{{product.image}}" alt="{{product.name}}" style="width: 200px; height: 200px;"></td>
-    <td>{{product.category}}</td>
-    <td>{{product.description}}</td>
-  </tr>
-  {% endfor %}
-</table>
-{% endif %}
+    {% comment %} Berikut cara memperlihatkan data product di bawah baris ini 
+    {% endcomment %} 
+    {% for product in product_entries %}
+    <tr>
+        <td>{{product.name}}</td>
+        <td>{{product.price}}</td>
+        <td><img src="{{product.image}}" alt="{{product.name}}" style="width: 200px; height: 200px;"></td>
+        <td>{{product.category}}</td>
+        <td>{{product.description}}</td>
+    </tr>
+    {% endfor %}
+    </table>
+    {% endif %}
 
-<br />
+    <br />
 
-<a href="{% url 'main:create_product' %}">
-  <button>Add New Product</button>
-</a>
+    <a href="{% url 'main:create_product' %}">
+    <button>Add New Product</button>
+    </a>
 
-{% endblock content %}
+    {% endblock content %}
 
-'<td><img src="{{product.image}}" alt="{{product.name}}" style="width: 200px; height: 200px;"></td>'
-    <td>{{product.category}}</td>, baris kode ini berfungsi untuk menampilkan link foto menjadi foto yang diinginkan pada tampilan halaman utama
+    '<td><img src="{{product.image}}" alt="{{product.name}}" style="width: 200px; height: 200px;"></td>'
+        <td>{{product.category}}</td>, baris kode ini berfungsi untuk menampilkan link foto menjadi foto yang diinginkan pada tampilan halaman utama
 
 10. Kemudian, jalankan Django dengan perintah 'python3 manage.py runserver' dan akses dengan link http://localhost:8000/ untuk mencoba mulai menambahkan product
 
@@ -239,7 +239,7 @@ urlpatterns = [
     - Pastikan server sudah berjalan dengan perintah 'python3 manage.py runserver'.
     - Buka Postman dan buatlah sebuah request baru dengan method GET dan url http://localhost:8000/xml/ atau http://localhost:8000/json/ untuk mengetes apakah data terkirimkan dengan baik.
     - Klik tombol Send untuk mengirimkan request tersebut.
-    - Hasilnya dapat dilihat seperti pada screenshot dibawah ini mencari menggunakan tampilan XML, JSON, atau menggunakan ID dalam bentuk XML ataupun JSON
+    - Hasilnya dapat dilihat seperti pada screenshot dibawah ini merupakan hasil mencari menggunakan tampilan XML, JSON, atau menggunakan ID dalam bentuk XML ataupun JSON
 
 
 ## Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam README.md.
