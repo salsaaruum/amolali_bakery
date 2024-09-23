@@ -14,6 +14,8 @@ Perbedaan antara HttpResponseRedirect() dan redirect() di Django terletak pada t
         - sebuah instance model (kemudian otomatis mengarahkan ke URL detailnya)
     - redirect() secara internal menggunakan HttpResponseRedirect() untuk membuat pengalihan, namun menyederhanakan beberapa hal untuk pengembang
 
+
+
 ## 2. Jelaskan cara kerja penghubungan model Product dengan User!
 Jawaban :
 Model product dengan user dihubungkan melalui ForeignKey atau relasi lain seperti ManyToManyField atau OneToOneField untuk mencatat siapa pembuat, siapa pemilik, atau pengelola produk tersebut. Berikut adalah cara kerjanya :
@@ -39,6 +41,8 @@ Model product dengan user dihubungkan melalui ForeignKey atau relasi lain sepert
 "user = models.ForeignKey(User, on_delete=models.CASCADE)", ini membuat hubungan antara Product dengan User. Field User menyimpan referensi pengguna yang membuat/memiliki produk. "on_delete=models.CASCADE" artinya jika pengguna dihapus, maka semua produk yang terkait dengan pengguna juga akan dihapus
 - **Mengakses Data**: Setelah model dihubungkan, Anda dapat dengan mudah mengakses produk yang dimiliki oleh pengguna tertentu, atau mengetahui siapa pemilik dari suatu produk :
      product_entries = Product.objects.filter(user=request.user), untuk mendapatkan semua produk yang dimiliki pengguna
+
+
     
 ## 3. Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
 Jawaban :
@@ -72,6 +76,8 @@ Bagaimana Django mengimplementasikan kedua konsep tersebut:
         - Permissions: Django memungkinkan Anda untuk menetapkan permissions untuk model atau tindakan tertentu. Misalnya, setiap model dalam Django secara otomatis mendapatkan tiga permission standar: add, change, dan delete
         - Groups: Django juga mendukung groups, yang merupakan cara untuk mengelompokkan beberapa pengguna dan memberikan izin secara kolektif 
         - Django's Decorators: Django juga menyediakan dekorator untuk memudahkan otorisasi di view
+
+
 
 ## 4. Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
 Jawaban :
@@ -277,7 +283,8 @@ selanjutnya restriksi akses ke halaman main :
     - Akun 2:
     ![](https://github.com/salsaaruum/amolali_bakery/blob/main/Screenshot_akun2.png)
 
-    ada dibagian atas dan bawah
+    informasi akun dan last login ada dibagian atas dan bawah
+    
 ## Link Deploy PWS :
     https://salsabila-arumdapta-amolalibakery.pbp.cs.ui.ac.id
 
@@ -610,9 +617,5 @@ Model Django disebut sebagai ORM (Object Relation Mapping) karena memungkinkan p
 
 ## Link deploy PWS
 https://salsabila-arumdapta-amolalibakery.pbp.cs.ui.ac.id
-
-
-
-
 
 
