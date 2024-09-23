@@ -271,13 +271,15 @@ selanjutnya restriksi akses ke halaman main :
     PRODUCTION = os.getenv("PRODUCTION", False)
     DEBUG = not PRODUCTION
 
-4. - Akun 1:
+4. **Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.** :
+    - Akun 1:
     ![](https://github.com/salsaaruum/amolali_bakery/blob/main/Screenshot_akun1.png)
-- Akun 2:
+    - Akun 2:
     ![](https://github.com/salsaaruum/amolali_bakery/blob/main/Screenshot_akun2.png)
 
     ada dibagian atas dan bawah
 ## Link Deploy PWS :
+    https://salsabila-arumdapta-amolalibakery.pbp.cs.ui.ac.id
 
 
 # Tugas 3
