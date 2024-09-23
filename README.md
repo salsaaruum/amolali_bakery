@@ -610,3 +610,9 @@ Model Django disebut sebagai ORM (Object Relation Mapping) karena memungkinkan p
 
 ## Link deploy PWS
 https://salsabila-arumdapta-amolalibakery.pbp.cs.ui.ac.id
+
+
+
+
+
+
