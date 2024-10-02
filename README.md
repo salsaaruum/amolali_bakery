@@ -1,10 +1,10 @@
 # Tugas 5
 ## 1.  Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
 Jawaban:
-Terdapat beberapa selector yang berlaku di CSS untuk satu elemen HTML, urutan priotitasnya menenrukan gaya mana yang diterapkan. Urutan priotitasnya antara lain :
+Terdapat beberapa selector yang berlaku di CSS untuk satu elemen HTML, urutan prioritasnya menentukan gaya mana yang diterapkan. Urutan prioritasnya antara lain :
 - **Inline Styles** : Gaya yang didefinisikan langsung pada elemen dengan atribut style="" memiliki prioritas tertinggi. Selektor ini memiliki specificity tertinggi. Contoh:
     <p style="color: red;">Text</p>
-- **ID Selectors** : Selektor yang menggunakan ID elemen. Selektor ini memiliki tingkat specificity yang lebih tinggi daripada class, psiuedi-class, atau element selector. Contoh:
+- **ID Selectors** : Selektor yang menggunakan ID elemen. Selektor ini memiliki tingkat specificity yang lebih tinggi daripada class, pseudo-class, atau element selector. Contoh:
         #header {
         color: blue;
     }
@@ -20,8 +20,8 @@ Terdapat beberapa selector yang berlaku di CSS untuk satu elemen HTML, urutan pr
     }
 - **Element selectors dan pseudo-element selectors** : Selektor yang menggunakan elemen HTML langsung atau pseudo-element seperti ::before dan ::after. Contoh:
         p {
-        color: black;
-    }
+            color: black;
+        }
 - **Universal selector(*) dan inheritance** : Universal selector dan gaya yang dihasilkan melalui pewarisan dari elemen parent memiliki prioritas paling rendah.
 - **!important** : Deklarasi dengan !important akan mengesampingkan semua prioritas selector lainnya, terlepas dari specificity.
     .content {
@@ -35,7 +35,7 @@ Jika digunakan, maka teks akan berwarna hijau, walaupun ada ID atau inline style
 Jawaban: 
 Responsive design menjadi konsep yang penting dalam pengembangan aplikasi web karena :
 - **Meningkatkan pengalaman pengguna (UX)**: Aplikasi web yang lebih responsive akan memudahkan pelanggan dalam menggunakannya. Hal ini karena elemen-elemen seperti tombol, teks, gambarnya menyesuaikan layar. Hal ini menghindari masalah yang dapat ditimbulkan seperti teks yang terlalu kecil, gambar yang tidak proposional, tombol yang tidak bisa ditekan, dan masih banyak lagi. Sehingga, pengguna nyaman dalam menggunakan aplikasi web tersebut
-- **Dapat digunakan di beragam perangkat**: Pengguna bisa mengakses aplikasi web melalui berbagai perangkat seperti smartphone, tablet, laptop, dekstop dengan layar dan resolusi yang berbeda. Hal ini terjadi karena responsive design memastikan tanpilan aplikasi web secara otomatis menyesuaikan tampilan sesuai perangkat tanpa harus mengembangkan versi terpisah untuk tiap jenis perangkat. Tnetunya hal ini menghemat biaya dan waktu sehingga lebih efisien dalam pemeliharaan aplikasi
+- **Dapat digunakan di beragam perangkat**: Pengguna bisa mengakses aplikasi web melalui berbagai perangkat seperti smartphone, tablet, laptop, dekstop dengan layar dan resolusi yang berbeda. Hal ini terjadi karena responsive design memastikan tampilan aplikasi web secara otomatis menyesuaikan tampilan sesuai perangkat tanpa harus mengembangkan versi terpisah untuk tiap jenis perangkat. Tentunya hal ini menghemat biaya dan waktu sehingga lebih efisien dalam pemeliharaan aplikasi
 - **Optimisasi performa**: Dengan responsive deisgn, elemen yang terdapat pada aplikasi web seperti gambar, tombol, teks, dan fitur-fitur lainnya dapat dioptimalkan dengan perangkat dengan layar yang kecil maupun yang besar. Hal ini membantu meningkatkan kecepatan dan efisiensi loading halaman terutama di perangkat dengan keterbatasan bandwidth
 
 **Contoh aplikasi yang sudah menerapkan responsive design** :
@@ -458,7 +458,7 @@ Jawaban:
             </div>
 
 - **Untuk setiap card product, buatlah dua buah button untuk mengedit dan menghapus product pada card tersebut!**
-    1. Bagian ini diatus dalam 'card_product.html'
+    1. Bagian ini diatur dalam 'card_product.html'
     2. Berikut kode nya :
           <div class="absolute top-0 -right-4 flex space-x-1">
             <a href="{% url 'main:edit_product' product.id %}" class="bg-purple-500 hover:bg-purple-700 text-white rounded-full p-2 transition duration-300 shadow-md">
