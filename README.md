@@ -106,63 +106,64 @@ Jawaban:
  - **Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan mood**:
     1. Tambahkan kode untuk implementasi modal (tailwind), main/templates/main.html:
         <div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
-        <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
-        <!-- Modal header -->
-        <div class="flex items-center justify-between p-4 border-b rounded-t">
-        <h3 class="text-xl font-semibold text-gray-900">
-        Add New Product
-    </h3>
-    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn">
-    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-    </svg>
-    <span class="sr-only">Close modal</span>
-    </button>
-    </div>
+            <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+            
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 border-b rounded-t">
+            <h3 class="text-xl font-semibold text-gray-900">
+                Add New Product
+            </h3>
+            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn">
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="sr-only">Close modal</span>
+            </button>
+            </div>
 
-    <!-- Modal body -->
-    <div class="px-6 py-4 space-y-6 form-style">
-    <form id="ProductForm">
-        
-    <!-- Product Name -->
-    <div class="mb-4">
-    <label for="name" class="block text-sm font-medium text-gray-700">Product Name</label>
-    <input type="text" id="name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product name" required>
-    </div>
+            <!-- Modal body -->
+            <div class="px-6 py-4 space-y-6 form-style">
+            <form id="ProductForm">
+                
+                <!-- Product Name -->
+                <div class="mb-4">
+                <label for="name" class="block text-sm font-medium text-gray-700">Product Name</label>
+                <input type="text" id="name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product name" required>
+                </div>
 
-    <!-- Price -->
-    <div class="mb-4">
-    <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
-    <input type="number" id="price" name="price" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter price" required>
-    </div>
+                <!-- Price -->
+                <div class="mb-4">
+                <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                <input type="number" id="price" name="price" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter price" required>
+                </div>
 
-    <!-- Description -->
-    <div class="mb-4">
-    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-    <textarea id="description" name="description" rows="3" class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product description" required></textarea>
-    </div>
+                <!-- Description -->
+                <div class="mb-4">
+                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea id="description" name="description" rows="3" class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product description" required></textarea>
+                </div>
 
-    <!-- Category -->
-    <div class="mb-4">
-    <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-    <input type="text" id="category" name="category" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product category">
-    </div>
+                <!-- Category -->
+                <div class="mb-4">
+                <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                <input type="text" id="category" name="category" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product category">
+                </div>
 
-    <!-- Image URL -->
-    <div class="mb-4">
-    <label for="image" class="block text-sm font-medium text-gray-700">Image URL</label>
-    <input type="url" id="image" name="image" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter image URL" required>
-    </div>
-    </form>
-    </div>
+                <!-- Image URL -->
+                <div class="mb-4">
+                <label for="image" class="block text-sm font-medium text-gray-700">Image URL</label>
+                <input type="url" id="image" name="image" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter image URL" required>
+                </div>
+            </form>
+            </div>
 
-    <!-- Modal footer -->
-    <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
-    <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
-    <button type="submit" id="submitProductEntry" form="ProductForm" class="bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
-    </div>
-    </div>
-    </div>
+            <!-- Modal footer -->
+            <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
+            <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+            <button type="submit" id="submitProductEntry" form="ProductForm" class="bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+            </div>
+            </div>
+            </div>
 
     2. Tambahkan fungsi-fungsi JavScript agar modal dapat berfungsi:
         <script>
@@ -229,10 +230,10 @@ Jawaban:
             return HttpResponse(b"CREATED", status=201)
 
  - **Buatlah path /create-ajax/ yang mengarah ke fungsi view yang baru kamu buat**:
-    5.         urlpatterns = [
-                    ...
-                    path('create-product-entry-ajax', add_product_entry_ajax, name='add_product_entry_ajax'),
-                ]
+    5.  urlpatterns = [
+            ...
+            path('create-product-entry-ajax', add_product_entry_ajax, name='add_product_entry_ajax'),
+        ]
 
  - **Hubungkan form yang telah kamu buat di dalam modal kamu ke path /create-ajax/**:
 
@@ -245,7 +246,7 @@ Jawaban:
         ]
 
  - **Lakukan refresh pada halaman utama secara asinkronus untuk menampilkan daftar mood terbaru tanpa reload halaman utama secara keseluruhan**:
-    7.     9. Buat fungsi baru block <script/> dengan nama refreshProductEntries untuk me-refresh data product secara asinkronus:
+    7. Buat fungsi baru block <script/> dengan nama refreshProductEntries untuk me-refresh data product secara asinkronus:
           async function refreshProductEntries() {
             document.getElementById("product_entry_cards").innerHTML = "";
             document.getElementById("product_entry_cards").className = "";
