@@ -1,3 +1,4 @@
+from main.views import add_product_entry_ajax #routing ajax
 from main.views import edit_product, delete_product
 from main.views import login_user, logout_user
 from main.views import register
@@ -18,4 +19,5 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('edit-product/<uuid:id>', edit_product, name='edit_product'),
     path('delete/<uuid:id>', delete_product, name='delete_product'),
+    path('create-product-entry-ajax', add_product_entry_ajax, name='add_product_entry_ajax'),
 ]

@@ -1,3 +1,308 @@
+# Tugas 6 
+## 1. Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+Jawaban: 
+- **Interaktif**: JavaScript memungkinkan pengembang untuk menambahkan elemen interaktif pada halaman web, seperti menu dropdown, modals, dan elemen yang merespons tindakan pengguna (klik, hover, dll.)
+- **Pengembangan aplikasi web lebih responsif**: JavaScript memungkinkan pembuatan aplikasi web yang responsif, di mana pengguna dapat berinteraksi dengan aplikasi tanpa penundaan. Ini termasuk pembaruan konten tanpa memuat ulang halaman (melalui AJAX) dan pengambilan data dari server.
+- **Manipulasi DOM**: Dengan JavaScript, pengembang dapat mengakses dan memanipulasi Document Object Model (DOM) untuk memperbarui konten dan struktur halaman web secara dinamis tanpa perlu memuat ulang halaman.
+- **Pengembangan Backend**: Dengan adanya Node.js, JavaScript sekarang dapat digunakan untuk pengembangan sisi server, memungkinkan pengembang untuk menggunakan satu bahasa untuk seluruh tumpukan aplikasi (frontend dan backend).
+- **Kompatibilitas Lintas Platform**: JavaScript didukung oleh semua browser modern, sehingga aplikasi yang dibangun dengan JavaScript dapat diakses di berbagai perangkat dan sistem operasi.
+
+
+## 2. Jelaskan fungsi dari penggunaan await ketika kita menggunakan fetch()! Apa yang akan terjadi jika kita tidak menggunakan await?
+Jawaban:
+- **Fungsi await**:
+    - **Menunggu hasil**: Ketika menggunakan await dengan fetch(), JavaScript akan menunggu hingga permintaan (request) selesai dan mendapatkan respons (response) dari server sebelum melanjutkan ke baris kode berikutnya. Ini memastikan bahwa kita tidak mencoba untuk mengakses data dari respons yang belum tersedia.
+    - **Menyederhanakan penanganan promise**: Dengan await, kita dapat menulis kode yang lebih bersih dan lebih mudah dibaca, mirip dengan penulisan kode sinkron. Tanpa await, kita akan memerlukan chaining .then() yang dapat membuat kode menjadi lebih rumit.
+
+- **Apa yang terjadi jika tidak menggunakan await**:
+    - **Promise tidak teratasi**: jika tidak menggunakan await, fetch() akan tetap mengembalikan promise, dan eksekusi kode akan terus berlanjut tanpa menunggu respons. Ini bisa menyebabkan kita mencoba mengakses data sebelum data tersebut tersedia.
+    - **Kesalahaan dalam penanganan respons**: Tanpa await, kita tidak akan bisa mendapatkan data dari respons secara langsung. Hal ini akan menyebabkan kita memerlukan cara lain untuk menangani promise, seperti menggunakan .then().
+    - **Potensi adanya bug**: Tidak menggunakan await bisa menyebabkan bug yang sulit ditemukan karena kode yang bergantung pada data dari server akan dieksekusi sebelum data tersebut tersedia.
+
+
+## 3. Mengapa kita perlu menggunakan decorator csrf_exempt pada view yang akan digunakan untuk AJAX POST?
+Jawaban:
+- **Perlindungan CSRF**: Django secara otomatis akan mengaktifkan perlindungan CSRF untuk semua view yang menggunakan metode POST. Hal ini bertujuan untuk mencegah serangan pihak ketiga untuk mengirim permintaan tidak sah atas nama pengguna tanpa sepengetahuan mereka. Dengan CSRF, setiap formulir yang dikirimkan harus menyertakan token CSRF yang valid.
+- **Permintaan AJAX dann token CSRF**: Ketika kita mengirimkan permintaan AJAX dengan metode POST, kita perlu memastikan bahwa token CSRF dikirim bersama dengan permintaan tersebut. Jika tidak, Django akan menolak permintaan tersebut dan mengembalikan kesalahan 403 (Forbidden). Jika kita tidak ingin menangani pengiriman token CSRF secara manual untuk setiap permintaan AJAX, kita dapat menggunakan csrf_exempt.
+- **Penggunaan csrf_exempt**: Dengan menggunakan csrf_exempt, kita memberi tahu Django untuk tidak menerapkan pemeriksaan CSRF pada view tertentu. Ini sangat berguna dalam situasi berikut:
+    - API Endpoints
+    - Simplicity
+- **Risiko keamanan**: Meskipun csrf_exempt membuat pengembangan lebih mudah, penggunaannya harus dilakukan dengan hati-hati. Menonaktifkan perlindungan CSRF dapat membuka aplikasi kita terhadap serangan yang berpotensi merugikan. Sebaiknya, hanya gunakan csrf_exempt pada view yang benar-benar membutuhkan pengecualian ini, dan pastikan untuk melakukan validasi yang ketat pada data yang diterima.
+
+
+## 4. Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
+Jawaban:
+- **Keamanan**: 
+    - **Menghindari Manipulasi oleh Pengguna**: Validasi di frontend bisa diabaikan atau dimanipulasi oleh pengguna yang paham teknologi, misalnya dengan menggunakan alat seperti browser developer tools atau aplikasi pihak ketiga. Oleh karena itu, backend harus tetap memeriksa dan membersihkan data untuk mencegah input berbahaya atau tidak valid.
+    - **Mencegah Serangan Berbasis Input**: Serangan seperti SQL Injection atau Cross-Site Scripting (XSS) sering kali memanfaatkan data input yang tidak divalidasi dengan baik. Backend memiliki kontrol penuh terhadap validasi ini dan dapat melindungi sistem dari serangan tersebut.
+
+- **Integritas data**:
+    - **Frontend Dapat Dilewati**: Validasi frontend tergantung pada kode JavaScript yang berjalan di browser pengguna. Karena kode ini bisa dimodifikasi atau bahkan dihilangkan, server harus memastikan bahwa data yang masuk sudah aman dan sesuai standar.
+    - **Keandalan Validasi**: Pada sisi frontend, validasi dan pembersihan dapat dilakukan untuk meningkatkan pengalaman pengguna (user experience) dengan memberikan umpan balik yang cepat. Namun, karena data pada akhirnya akan diproses oleh server, validasi dan pembersihan di backend memastikan bahwa data yang disimpan dalam sistem selalu memenuhi persyaratan.
+
+- **Mengatasi lingkungan yang berbeda**:
+    - **Mengatasi Masalah Browser dan Perangkat**: Tidak semua pengguna memiliki browser yang mendukung validasi yang diterapkan di frontend. Backend, di sisi lain, selalu memiliki kontrol penuh atas validasi yang diperlukan dan bekerja secara konsisten di semua perangkat dan browser.
+
+
+## 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+Jawaban:
+**AJAX GET**
+ - **Ubahlah kode cards data mood agar dapat mendukung AJAX GET**:
+    1. Tambahkan import pada file 'views.py':
+        from django.views.decorators.csrf import csrf_exempt
+        from django.views.decorators.http import require_POST
+    2. Buat parameter baru pada file 'views.py' untuk menerima request:
+        @csrf_exempt
+        @require_POST
+        def add_product_entry_ajax(request):
+            name = strip_tags(request.POST.get("name")) #strip HTML tags!
+            price = request.POST.get("price")
+            description = strip_tags(request.POST.get("description")) #strip HTML tags!
+            category = request.POST.get("category")
+            image = request.POST.get("image")
+            user = request.user
+
+            new_product = Product(
+                name=name, 
+                price=price,
+                description=description,
+                category=category,
+                image=image,
+                user=user
+            )
+            new_product.save()
+
+            return HttpResponse(b"CREATED", status=201)
+
+ - **Lakukan pengambilan data mood menggunakan AJAX GET. Pastikan bahwa data yang diambil hanyalah data milik pengguna yang logged-in**: 
+    3. Untuk menampilkan Data product entry dengan fetch() API, buka file 'views.py' lalu hapus baris :
+        product_entries = Product.objects.filter(user=request.user) dan 
+        'product_entries': product_entries,
+    4. Buka file 'views.py', ubah baris pertama views untuk show_xml dan show_json:
+        data = Product.objects.filter(user=request.user)
+    5. Buka file 'main.html' lalu hapus block conditional product_entries untuk menampilkan card_product kosong atau tidak:
+        {% if not product_entries %}
+            <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+                <p class="text-center text-gray-600 mt-4">Belum ada barang yang dijual nih...</p>
+            </div>
+            {% else %}
+            <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full">
+                {% for product in product_entries %}
+                    {% include 'card_product.html' with product=product %}
+                {% endfor %}
+            </div>
+            {% endif %}
+    6. Tambahkan potongan kode ini:
+        ...
+        <div id="product_entry_cards"></div>
+        ...
+    7. Buatlah block <script/> dibagian bawah berkas sebelum endblock content dan buatlah fungsi dengan nama getProductEntries:
+        async function getProductEntries(){
+            return fetch("{% url 'main:show_json' %}").then((res) => res.json())
+        }
+
+**AJAX POST**
+ - **Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan mood**:
+    1. Tambahkan kode untuk implementasi modal (tailwind), main/templates/main.html:
+        <div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+        <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+        <!-- Modal header -->
+        <div class="flex items-center justify-between p-4 border-b rounded-t">
+        <h3 class="text-xl font-semibold text-gray-900">
+        Add New Product
+    </h3>
+    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn">
+    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+    </svg>
+    <span class="sr-only">Close modal</span>
+    </button>
+    </div>
+
+    <!-- Modal body -->
+    <div class="px-6 py-4 space-y-6 form-style">
+    <form id="ProductForm">
+        
+    <!-- Product Name -->
+    <div class="mb-4">
+    <label for="name" class="block text-sm font-medium text-gray-700">Product Name</label>
+    <input type="text" id="name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product name" required>
+    </div>
+
+    <!-- Price -->
+    <div class="mb-4">
+    <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+    <input type="number" id="price" name="price" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter price" required>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-4">
+    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+    <textarea id="description" name="description" rows="3" class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product description" required></textarea>
+    </div>
+
+    <!-- Category -->
+    <div class="mb-4">
+    <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+    <input type="text" id="category" name="category" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product category">
+    </div>
+
+    <!-- Image URL -->
+    <div class="mb-4">
+    <label for="image" class="block text-sm font-medium text-gray-700">Image URL</label>
+    <input type="url" id="image" name="image" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter image URL" required>
+    </div>
+    </form>
+    </div>
+
+    <!-- Modal footer -->
+    <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
+    <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+    <button type="submit" id="submitProductEntry" form="ProductForm" class="bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+    </div>
+    </div>
+    </div>
+
+    2. Tambahkan fungsi-fungsi JavScript agar modal dapat berfungsi:
+        <script>
+            ...
+        const modal = document.getElementById('crudModal');
+        const modalContent = document.getElementById('crudModalContent');
+
+        function showModal() {
+            const modal = document.getElementById('crudModal');
+            const modalContent = document.getElementById('crudModalContent');
+
+            modal.classList.remove('hidden'); 
+            setTimeout(() => {
+                modalContent.classList.remove('opacity-0', 'scale-95');
+                modalContent.classList.add('opacity-100', 'scale-100');
+            }, 50); 
+        }
+
+        function hideModal() {
+            const modal = document.getElementById('crudModal');
+            const modalContent = document.getElementById('crudModalContent');
+
+            modalContent.classList.remove('opacity-100', 'scale-100');
+            modalContent.classList.add('opacity-0', 'scale-95');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 150); 
+        }
+
+        document.getElementById("cancelButton").addEventListener("click", hideModal);
+        document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+                </script>
+
+    3. Ubah bagian tombol Add New Product yang sudah ditambahkan di tugas sebelumnya dan tambah tombol baru untuk menambahkan data dengan AJAX:
+        ...
+            <a href="{% url 'main:create_product' %}" class="bg-indigo-400 hover:bg-indigo-400 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 mx-4 ">
+            Add New Product
+            </a>
+            <button data-modal-target="crudModal" data-modal-toggle="crudModal" class="btn bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105" onclick="showModal();">
+            Add New Product by AJAX
+            </button>
+        ...
+
+ - **Buatlah fungsi view baru untuk menambahkan mood baru ke dalam basis data**:
+    4. def add_product_entry_ajax(request):
+            name = strip_tags(request.POST.get("name")) #strip HTML tags!
+            price = request.POST.get("price")
+            description = strip_tags(request.POST.get("description")) #strip HTML tags!
+            category = request.POST.get("category")
+            image = request.POST.get("image")
+            user = request.user
+
+            new_product = Product(
+                name=name, 
+                price=price,
+                description=description,
+                category=category,
+                image=image,
+                user=user
+            )
+            new_product.save()
+
+            return HttpResponse(b"CREATED", status=201)
+
+ - **Buatlah path /create-ajax/ yang mengarah ke fungsi view yang baru kamu buat**:
+    5.         urlpatterns = [
+                    ...
+                    path('create-product-entry-ajax', add_product_entry_ajax, name='add_product_entry_ajax'),
+                ]
+
+ - **Hubungkan form yang telah kamu buat di dalam modal kamu ke path /create-ajax/**:
+
+    6. Tambahkan routing untuk fungsi add_product_entry_ajax, buka 'urls.py', tambahkan import dan path url:
+        from main.views import ..., add_mood_entry_ajax
+
+        urlpatterns = [
+            ...
+            path('create-product-entry-ajax', add_product_entry_ajax, name='add_product_entry_ajax'),
+        ]
+
+ - **Lakukan refresh pada halaman utama secara asinkronus untuk menampilkan daftar mood terbaru tanpa reload halaman utama secara keseluruhan**:
+    7.     9. Buat fungsi baru block <script/> dengan nama refreshProductEntries untuk me-refresh data product secara asinkronus:
+          async function refreshProductEntries() {
+            document.getElementById("product_entry_cards").innerHTML = "";
+            document.getElementById("product_entry_cards").className = "";
+            const productEntries = await getProductEntries();
+            let htmlString = "";
+            let classNameString = "";
+
+            if (productEntries.length === 0) {
+                classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+                htmlString = `
+                    <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                        <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+                        <p class="text-center text-gray-600 mt-4">Belum ada data product pada Amolali Bakery</p>
+                    </div>
+                `;
+            }
+            else {
+                classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
+                productEntries.forEach((item) => {
+                    htmlString += `
+                    <div class="relative break-inside-avoid">
+                        <div class="relative top-5 bg-indigo-100 shadow-md rounded-lg mb-6 break-inside-avoid flex flex-col border-2 border-indigo-300 transform rotate-1 hover:rotate-0 transition-transform duration-300">
+                            <div class="bg-indigo-200 text-gray-800 p-4 rounded-t-lg border-b-2 border-indigo-300">
+                                <h3 class="font-bold text-xl mb-2">${name}</h3>
+                                <p class="text-gray-600">Price: ${item.fields.price}</p>
+                            </div>
+                            <div class="p-4">
+                                <p class="font-semibold text-lg mb-2">Description</p>
+                                <p class="text-gray-700 mb-2">${description}</p>
+                                <img src="${item.fields.image}" alt="${item.fields.name}" class="w-full h-auto rounded-lg mt-4">
+                            </div>
+                        </div>
+                        <div class="absolute top-0 -right-4 flex space-x-1">
+                            <a href="/edit-product/${item.pk}" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2 transition duration-300 shadow-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                </svg>
+                            </a>
+                            <a href="/delete/${item.pk}" class="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition duration-300 shadow-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    `;
+                });
+            }
+            document.getElementById("product_entry_cards").className = classNameString;
+            document.getElementById("product_entry_cards").innerHTML = htmlString;
+        }
+        refreshProductEntries();
+        
+
+
+
+
 # Tugas 5
 ## 1.  Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
 Jawaban:
@@ -546,6 +851,8 @@ Jawaban:
             });
             </script>
         </nav>
+
+
 
 
 # Tugas 4
